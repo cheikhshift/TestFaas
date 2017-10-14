@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gos gateway="http://someurl">
+<gos >
 	<!-- xml docs : http://golangserver.com/docs/markup.html -->
 	<deploy>faas</deploy>
 	<port>8050</port>
