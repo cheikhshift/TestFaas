@@ -215,51 +215,9 @@ import (
 
 					 
 				if  isURL := (r.URL.Path == "server/api/path" && r.Method == strings.ToUpper("POST") );!callmet && isURL{ 
-						
-					lastLine := ""
-					var sp //opentracing.Span
-					    opName := fmt.Sprintf(" []%s %s", r.Method,r.URL.Path)
-					  
-					  if true {
-					   carrier := //opentracing.HTTPHeadersCarrier(r.Header)
-					wireContext, err := //opentracing.GlobalTracer().Extract(//opentracing.HTTPHeaders, carrier); if err != nil {
-					        sp = //opentracing.StartSpan(opName)
-					    } else {
-					        sp = //opentracing.StartSpan(opName, //opentracing.ChildOf(wireContext))
-					    }
-						}
-					  defer sp.Finish()
-					defer func() {
-					       if n := recover(); n != nil {
-					          log.Println("Web request (server/api/path) failed at line :",GetLine(".//gos.gxml", lastLine),"Of file:.//gos.gxml :", strings.TrimSpace(lastLine))
-					          log.Println("Reason : ",n)
-					          
-					       	 span.SetTag("error", true)
-            span.LogEvent(fmt.Sprintf("%s request at %s, reason : %s ", r.Method, r.URL.Path, n) )
-					        	 w.WriteHeader(http.StatusInternalServerError)
-							    w.Header().Set("Content-Type",  "text/html")
-								pag,err := loadPage("/your-500-page")
-				   
-								 if err != nil {
-								        	log.Println(err.Error())
-								        	callmet = true	        	
-								        	return 
-								 }
-								  pag.R = r
-						         pag.Session = session	
-								   if pag.isResource {
-							        	w.Write(pag.Body)
-							    	} else {
-							    		renderTemplate(w, pag) //"s" 
-							     
-							    	}
-					           callmet = true
-					        
-					        }
-						}()
-						
-lastLine =  `log.Println(r)`
-log.Println(r)
+					
+  		log.Println(r)
+  	
 					callmet = true
 				}
 				
