@@ -7,7 +7,6 @@ import (
 			"github.com/gorilla/context"
 			"errors"
 			"github.com/cheikhshift/db"
-			"github.com/elazarl/go-bindata-assetfs"
 			"bytes"
 			"encoding/json"
 			"fmt"
