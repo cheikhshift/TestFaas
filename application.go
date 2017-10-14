@@ -217,15 +217,15 @@ import (
 				if  isURL := (r.URL.Path == "server/api/path" && r.Method == strings.ToUpper("POST") );!callmet && isURL{ 
 						
 					lastLine := ""
-					var sp opentracing.Span
+					var sp //opentracing.Span
 					    opName := fmt.Sprintf(" []%s %s", r.Method,r.URL.Path)
 					  
 					  if true {
-					   carrier := opentracing.HTTPHeadersCarrier(r.Header)
-					wireContext, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, carrier); if err != nil {
-					        sp = opentracing.StartSpan(opName)
+					   carrier := //opentracing.HTTPHeadersCarrier(r.Header)
+					wireContext, err := //opentracing.GlobalTracer().Extract(//opentracing.HTTPHeaders, carrier); if err != nil {
+					        sp = //opentracing.StartSpan(opName)
 					    } else {
-					        sp = opentracing.StartSpan(opName, opentracing.ChildOf(wireContext))
+					        sp = //opentracing.StartSpan(opName, //opentracing.ChildOf(wireContext))
 					    }
 						}
 					  defer sp.Finish()
