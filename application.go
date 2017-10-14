@@ -20,12 +20,6 @@ import (
 			"os"
 			"bufio"
 			"log"
-			"github.com/opentracing/opentracing-go"
-			"net"
-			"net/url"
-			"sourcegraph.com/sourcegraph/appdash"
-			 appdashot "sourcegraph.com/sourcegraph/appdash/opentracing"
-			"sourcegraph.com/sourcegraph/appdash/traceapp"
 		)
 				var store = sessions.NewCookieStore([]byte("a very very very very secret key"))
 
@@ -125,7 +119,7 @@ import (
 
 
 			
-				func renderTemplate(w http.ResponseWriter, p *Page, span opentracing.Span)  bool {
+				func renderTemplate(w http.ResponseWriter, p *Page)  bool {
 				     defer func() {
 					        if n := recover(); n != nil {
 					           	 color.Red(fmt.Sprintf("Error loading template in path : web%s.tmpl reason : %s", p.R.URL.Path,n)  )
@@ -146,27 +140,14 @@ import (
 						    	} else {
 						    		pag.R = p.R
 						         	pag.Session = p.Session
-						    		renderTemplate(w, pag, span) ///your-500-page"
+						    		renderTemplate(w, pag) ///your-500-page"
 						     
 						    	}
 					        }
 					    }()
 
 
-				   
-  				var sp opentracing.Span
-			    opName := fmt.Sprintf("Building template %s%s", p.R.URL.Path, ".tmpl")
-			  
-			  if true {
-			   carrier := opentracing.HTTPHeadersCarrier(p.R.Header)
-			wireContext, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, carrier); if err != nil {
-			        sp = opentracing.StartSpan(opName)
-			    } else {
-			        sp = opentracing.StartSpan(opName, opentracing.ChildOf(wireContext))
-			    }
-			}
-			  defer sp.Finish()
-		
+				  
 				  
 				    t := template.New("PageWrapper")
 				    t = t.Funcs(template.FuncMap{"a":net_add,"s":net_subs,"m":net_multiply,"d":net_divided,"js" : net_importjs,"css" : net_importcss,"sd" : net_sessionDelete,"sr" : net_sessionRemove,"sc": net_sessionKey,"ss" : net_sessionSet,"sso": net_sessionSetInt,"sgo" : net_sessionGetInt,"sg" : net_sessionGet,"form" : formval,"eq": equalz, "neq" : nequalz, "lte" : netlt,"MVC" : net_MVC,"bMVC" : net_bMVC,"cMVC" : net_cMVC,"Hello" : net_structHello,"isHello" : net_castHello})
@@ -190,7 +171,7 @@ import (
 						  if pag.isResource {
 				        	w.Write(pag.Body)
 				    	} else {
-				    		renderTemplate(w, pag, span) // "/your-500-page" 
+				    		renderTemplate(w, pag) // "/your-500-page" 
 				     
 				    	}
 				    	return false
@@ -206,23 +187,16 @@ import (
 				    
 				}
 
-				func makeHandler(fn func (http.ResponseWriter, *http.Request, string,*sessions.Session, opentracing.Span)) http.HandlerFunc {
+				func makeHandler(fn func (http.ResponseWriter, *http.Request, string,*sessions.Session)) http.HandlerFunc {
 				  return func(w http.ResponseWriter, r *http.Request) {
-				  	  span := opentracing.StartSpan(fmt.Sprintf("%s %s",r.Method,r.URL.Path) )
-  				defer span.Finish()
-  			  carrier := opentracing.HTTPHeadersCarrier(r.Header)
-			if err := span.Tracer().Inject(span.Context(),opentracing.HTTPHeaders,carrier);  err != nil {
-		        log.Fatalf("Could not inject span context into header: %v", err)
-		    }
-
-
+				  	 
 					var session *sessions.Session
 				  	var er error
 				  	if 	session, er = store.Get(r, "session-"); er != nil {
 						session,_ = store.New(r, "session-")
 					}
-				  	if attmpt := apiAttempt(w,r,session, span) ;!attmpt {
-				      fn(w, r, "",session, span)
+				  	if attmpt := apiAttempt(w,r,session) ;!attmpt {
+				      fn(w, r, "",session)
 				  	}
 				  	
 				  	session = nil
@@ -234,7 +208,7 @@ import (
 					data,_ := json.Marshal(&v)
 					return string(data)
 				}
-				func apiAttempt(w http.ResponseWriter, r *http.Request, session *sessions.Session, span opentracing.Span) (callmet bool) {
+				func apiAttempt(w http.ResponseWriter, r *http.Request, session *sessions.Session) (callmet bool) {
 					var response string
 					response = ""
 					
@@ -507,29 +481,15 @@ import (
 				    }
 
 				}
-			func handler(w http.ResponseWriter, r *http.Request, contxt string,session *sessions.Session, span opentracing.Span) {
+			func handler(w http.ResponseWriter, r *http.Request, contxt string,session *sessions.Session) {
 				  var p *Page
 				  p,err := loadPage(r.URL.Path)
-				   
-  				var sp opentracing.Span
-			    opName := fmt.Sprintf(fmt.Sprintf("Web:/%s", r.URL.Path) )
-			  
-			  if true {
-			   carrier := opentracing.HTTPHeadersCarrier(r.Header)
-			wireContext, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, carrier); if err != nil {
-			        sp = opentracing.StartSpan(opName)
-			    } else {
-			        sp = opentracing.StartSpan(opName, opentracing.ChildOf(wireContext))
-			    }
-			}
-			  defer sp.Finish()
-		
+				  
 				  if err != nil {	
 				  		log.Println(err.Error())
 				  		
 				        w.WriteHeader(http.StatusNotFound)				  	
-				       	 span.SetTag("error", true)
-            span.LogEvent(fmt.Sprintf("%s request at %s, reason : %s ", r.Method, r.URL.Path, err) )
+				       	
 				        pag,err := loadPage("/your-404-page")
 				        
 				        if err != nil {
@@ -543,7 +503,7 @@ import (
 				        if pag.isResource {
 				        	w.Write(pag.Body)
 				    	} else {
-				    		renderTemplate(w, pag, span) //"/your-500-page" 
+				    		renderTemplate(w, pag) //"/your-500-page" 
 				    	}
 				        return
 				  }
@@ -553,7 +513,7 @@ import (
 				  		w.Header().Set("Content-Type",  "text/html")
 				  		p.Session = session
 				  		p.R = r
-				      	renderTemplate(w, p, span) //fmt.Sprintf("web%s", r.URL.Path)
+				      	renderTemplate(w, p) //fmt.Sprintf("web%s", r.URL.Path)
 				     
 				     // log.Println(w)
 				  } else {
@@ -619,7 +579,7 @@ import (
 				    	  return &Page{Body: body,isResource:false}, nil
 				    }
  
-				       //wheredefault
+				       
 				  
 				 } 
 				
