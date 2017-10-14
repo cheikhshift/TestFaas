@@ -1,4 +1,4 @@
-package TestFaas 
+package testfaas 
 import (
 	 	//iogos-replace
 			"net/http"

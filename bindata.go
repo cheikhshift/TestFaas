@@ -5,7 +5,7 @@
 // tmpl/mvc.tmpl
 // DO NOT EDIT!
 
-package TestFaas
+package testfaas
 
 import (
 	"fmt"
@@ -31,7 +31,7 @@ type asset struct {
 
 // webYour404PageTmpl reads file data from disk. It returns an error on failure.
 func webYour404PageTmpl() (*asset, error) {
-	path := "/Users/Adrian/gosapphire/src/github.com/cheikhshift/TestFaas/web/your-404-page.tmpl"
+	path := "/Users/Adrian/gosapphire/src/github.com/cheikhshift/testfaas/web/your-404-page.tmpl"
 	name := "web/your-404-page.tmpl"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -49,7 +49,7 @@ func webYour404PageTmpl() (*asset, error) {
 
 // webYour500PageTmpl reads file data from disk. It returns an error on failure.
 func webYour500PageTmpl() (*asset, error) {
-	path := "/Users/Adrian/gosapphire/src/github.com/cheikhshift/TestFaas/web/your-500-page.tmpl"
+	path := "/Users/Adrian/gosapphire/src/github.com/cheikhshift/testfaas/web/your-500-page.tmpl"
 	name := "web/your-500-page.tmpl"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -67,7 +67,7 @@ func webYour500PageTmpl() (*asset, error) {
 
 // tmplMvcTmpl reads file data from disk. It returns an error on failure.
 func tmplMvcTmpl() (*asset, error) {
-	path := "/Users/Adrian/gosapphire/src/github.com/cheikhshift/TestFaas/tmpl/mvc.tmpl"
+	path := "/Users/Adrian/gosapphire/src/github.com/cheikhshift/testfaas/tmpl/mvc.tmpl"
 	name := "tmpl/mvc.tmpl"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
