@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gos>
+<gos gateway="http://someurl">
 	<!-- xml docs : http://golangserver.com/docs/markup.html -->
 	<deploy>faas</deploy>
-	<port>8080</port>
+	<port>8050</port>
 	<package>if-package-is-library</package>
 	<not_found>/your-404-page</not_found>
 	<error>/your-500-page</error>
@@ -29,8 +29,12 @@
 	<template name="MVC" tmpl="mvc" struct="Hello" /> 
 	</templates>
 	<endpoints>
+
+
   	<end path="server/api/path" type="POST" >
   		log.Println(r)
   	</end>
+
+
 	</endpoints>
 </gos>
