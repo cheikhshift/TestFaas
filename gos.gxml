@@ -29,6 +29,8 @@
 	<template name="MVC" tmpl="mvc" struct="Hello" /> 
 	</templates>
 	<endpoints>
-  
+  	<end path="server/api/path" type="POST" >
+  		log.Println(r)
+  	</end>
 	</endpoints>
 </gos>

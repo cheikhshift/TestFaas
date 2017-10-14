@@ -186,7 +186,7 @@ import (
 				    
 				}
 
-				func makeHandler(fn func (http.ResponseWriter, *http.Request, string,*sessions.Session)) http.HandlerFunc {
+				func MakeHandler(fn func (http.ResponseWriter, *http.Request, string,*sessions.Session)) http.HandlerFunc {
 				  return func(w http.ResponseWriter, r *http.Request) {
 				  	 
 					var session *sessions.Session
@@ -213,7 +213,56 @@ import (
 					
 					
 
-					
+					 
+				if  isURL := (r.URL.Path == "server/api/path" && r.Method == strings.ToUpper("POST") );!callmet && isURL{ 
+						
+					lastLine := ""
+					var sp opentracing.Span
+					    opName := fmt.Sprintf(" []%s %s", r.Method,r.URL.Path)
+					  
+					  if true {
+					   carrier := opentracing.HTTPHeadersCarrier(r.Header)
+					wireContext, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, carrier); if err != nil {
+					        sp = opentracing.StartSpan(opName)
+					    } else {
+					        sp = opentracing.StartSpan(opName, opentracing.ChildOf(wireContext))
+					    }
+						}
+					  defer sp.Finish()
+					defer func() {
+					       if n := recover(); n != nil {
+					          log.Println("Web request (server/api/path) failed at line :",GetLine(".//gos.gxml", lastLine),"Of file:.//gos.gxml :", strings.TrimSpace(lastLine))
+					          log.Println("Reason : ",n)
+					          
+					       	 span.SetTag("error", true)
+            span.LogEvent(fmt.Sprintf("%s request at %s, reason : %s ", r.Method, r.URL.Path, n) )
+					        	 w.WriteHeader(http.StatusInternalServerError)
+							    w.Header().Set("Content-Type",  "text/html")
+								pag,err := loadPage("/your-500-page")
+				   
+								 if err != nil {
+								        	log.Println(err.Error())
+								        	callmet = true	        	
+								        	return 
+								 }
+								  pag.R = r
+						         pag.Session = session	
+								   if pag.isResource {
+							        	w.Write(pag.Body)
+							    	} else {
+							    		renderTemplate(w, pag) //"s" 
+							     
+							    	}
+					           callmet = true
+					        
+					        }
+						}()
+						
+lastLine =  `log.Println(r)`
+log.Println(r)
+					callmet = true
+				}
+				
 
 					if callmet {
 						session.Save(r,w)
@@ -480,7 +529,7 @@ import (
 				    }
 
 				}
-			func handler(w http.ResponseWriter, r *http.Request, contxt string,session *sessions.Session) {
+			func Handler(w http.ResponseWriter, r *http.Request, contxt string,session *sessions.Session) {
 				  var p *Page
 				  p,err := loadPage(r.URL.Path)
 				  
