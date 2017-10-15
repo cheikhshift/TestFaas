@@ -184,7 +184,7 @@ func AssetNames() []string {
 var _bindata = map[string]func() (*asset, error){
 	"web/your-404-page.tmpl": webYour404PageTmpl,
 	"web/your-500-page.tmpl": webYour500PageTmpl,
-	"tmpl/mvc.tmpl":          tmplMvcTmpl,
+	"tmpl/mvc.tmpl": tmplMvcTmpl,
 }
 
 // AssetDir returns the file names below a certain
@@ -226,7 +226,6 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
-
 var _bintree = &bintree{nil, map[string]*bintree{
 	"tmpl": &bintree{nil, map[string]*bintree{
 		"mvc.tmpl": &bintree{tmplMvcTmpl, map[string]*bintree{}},
@@ -283,3 +282,4 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+
