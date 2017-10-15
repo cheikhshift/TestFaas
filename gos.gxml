@@ -32,7 +32,7 @@
 
 
   	<end path="server/api/path" type="POST" >
-  		log.Println(r)
+  		response = mResponse(r)
   	</end>
 
 

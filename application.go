@@ -216,7 +216,7 @@ import (
 					 
 				if  isURL := (r.URL.Path == "server/api/path" && r.Method == strings.ToUpper("POST") );!callmet && isURL{ 
 					
-  		log.Println(r)
+  		response = mResponse(r)
   	
 					callmet = true
 				}
