@@ -218,7 +218,7 @@ import (
 					
   		buf := new(bytes.Buffer)
 		buf.ReadFrom(r.Body)
-		fmt.Println( buf.String() )
+		w.Write([]byte( buf.String() ) )
   	
 					callmet = true
 				}
